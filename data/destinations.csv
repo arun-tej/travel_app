@@ -1,0 +1,5 @@
+destination,avg_temp,budget,activities,spring_temp,summer_temp,fall_temp,winter_temp
+Paris,15,100,Cultural,Relaxation,12,24,18,5
+Tokyo,18,120,Adventure,Cultural,15,30,20,10
+Bangkok,30,50,Adventure,Nature,28,34,30,25
+New York,10,150,Cultural,Relaxation,13,28,18,-2
