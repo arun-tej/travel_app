@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Suggestion App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div> <!-- Wallpaper background overlay -->
+    
+    <div class="container">
+        <header>
+            <h1>🌎 Discover Your Perfect Destination</h1>
+            <p>Input your preferences and let us suggest the best travel spots tailored just for you!</p>
+        </header>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        <div class="form-container">
+            <form method="post">
+                <label>Preferred Temperature Range (°C):</label>
+                <div class="input-group">
+                    Min: <input type="number" name="min_temp" required>
+                    Max: <input type="number" name="max_temp" required>
+                </div>
+                
+                <label>Budget Range (USD per day):</label>
+                <div class="input-group">
+                    Min: <input type="number" name="min_budget" required>
+                    Max: <input type="number" name="max_budget" required>
+                </div>
+                
+                <label>Preferred Activities:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" name="activities" value="Cultural"> Cultural
+                    <input type="checkbox" name="activities" value="Relaxation"> Relaxation
+                    <input type="checkbox" name="activities" value="Adventure"> Adventure
+                    <input type="checkbox" name="activities" value="Nature"> Nature
+                </div>
+                
+                <button type="submit">🌍 Find Destinations</button>
+            </form>
+        </div>
+
+        {% if recommendations %}
+            <h2>Recommended Destinations for You</h2>
+            <div class="recommendations">
+                {% for dest in recommendations %}
+                    <div class="card">
+                        <h3>{{ dest['name'] }}</h3>
+                        <p><strong>Avg Temperature:</strong> {{ dest['avg_temp'] }}°C</p>
+                        <p><strong>Budget:</strong> ${{ dest['budget'] }} per day</p>
+                        <p><strong>Activities:</strong> {{ ', '.join(dest['activities']) }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif recommendations is not none %}
+            <p class="no-results">No destinations match your preferences.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

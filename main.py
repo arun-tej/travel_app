@@ -1,21 +1,42 @@
-# main.py
-
-from modules.user_input import get_user_preferences
+from flask import Flask, render_template, request
+from modules.recommendation import recommend_destinations
 from modules.data_collection import load_destination_data
-from modules.recommendation import recommend_destinations, display_recommendations
 
-def main():
-    # Step 1: Get user preferences
-    user_preferences = get_user_preferences()
+app = Flask(__name__)
+
+# Load destination data once when the app starts
+destinations = load_destination_data("data/output.csv")
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        # Retrieve user preferences from form inputs
+        try:
+            min_temp = float(request.form["min_temp"])
+            max_temp = float(request.form["max_temp"])
+            min_budget = int(request.form["min_budget"])
+            max_budget = int(request.form["max_budget"])
+            activities = request.form.getlist("activities")
+        except ValueError:
+            # Handle invalid input gracefully
+            return render_template("index.html", error="Please enter valid values for all fields.")
+
+        # Package preferences into a dictionary
+        user_preferences = {
+            "temperature_range": (min_temp, max_temp),
+            "budget_range": (min_budget, max_budget),
+            "activities": activities
+        }
+        
+        # Get recommendations based on user preferences
+        recommended_destinations = recommend_destinations(user_preferences, destinations)
+        
+        # Render results along with the original form
+        return render_template("index.html", recommendations=recommended_destinations, error=None)
     
-    # Step 2: Load destination data
-    destinations = load_destination_data()
-    
-    # Step 3: Get recommendations based on preferences
-    recommended_destinations = recommend_destinations(user_preferences, destinations)
-    
-    # Step 4: Display recommendations
-    display_recommendations(recommended_destinations)
+    # Render the form initially without recommendations
+    return render_template("index.html", recommendations=None, error=None)
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True, use_reloader=False)
+
