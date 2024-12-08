@@ -1,5 +1,3 @@
-# modules/user_input.py
-
 def get_user_preferences():
     print("Welcome to the Data-Driven Travel Suggestion App!")
     

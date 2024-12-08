@@ -99,3 +99,11 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# Add basic content to verify it's working
+st.title("Welcome to the Travel Suggestion App")
+st.write("This app will help you find the best destinations based on your preferences.")
+
+# Display a simple button to interact
+if st.button("Get Suggestions"):
+    st.write("Here are your travel suggestions!")

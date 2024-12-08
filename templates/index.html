@@ -52,9 +52,10 @@
                 {% for dest in recommendations %}
                     <div class="card">
                         <h3>{{ dest['name'] }}</h3>
+                        <p><strong>Destination:</strong> {{ dest['destination'] }}</p>
                         <p><strong>Avg Temperature:</strong> {{ dest['avg_temp'] }}°C</p>
                         <p><strong>Budget:</strong> ${{ dest['budget'] }} per day</p>
-                        <p><strong>Activities:</strong> {{ ', '.join(dest['activities']) }}</p>
+                        <p><strong>Activities:</strong> {{ ''.join(dest['activities']) }}</p>
                     </div>
                 {% endfor %}
             </div>
