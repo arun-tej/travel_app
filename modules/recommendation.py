@@ -1,30 +1,34 @@
-# modules/recommendation.py
-
 def recommend_destinations(user_preferences, destinations):
-    """
-    Recommend destinations based on user preferences.
-    Parameters:
-    - user_preferences: Dictionary with user's temperature, activity, and budget preferences.
-    - destinations: List of destinations loaded from data.
-    """
-    recommended = []
+    min_temp, max_temp = user_preferences["temperature_range"]
+    min_budget, max_budget = user_preferences["budget_range"]
+    activities = user_preferences["activities"]
+
+    recommended_destinations = []
 
     for destination in destinations:
-        # Check temperature range
-        temp_ok = (
-            user_preferences["temperature_range"][0] <= destination["avg_temp"] <= user_preferences["temperature_range"][1]
-        )
+        # Check if temperature values are valid (not None)
+        spring_temp = destination["spring_temp"]
+        summer_temp = destination["summer_temp"]
+        fall_temp = destination["fall_temp"]
+        winter_temp = destination["winter_temp"]
 
-        # Check budget range
-        budget_ok = (
-            user_preferences["budget_range"][0] <= destination["budget"] <= user_preferences["budget_range"][1]
-        )
+        # Debugging: Print values to help understand the issue
+        print(f"Checking destination: {destination['destination']}")
+        print(f"Temperature values: {spring_temp}, {summer_temp}, {fall_temp}, {winter_temp}")
+        print(f"User preferences: Temp range: {min_temp}-{max_temp}, Budget range: {min_budget}-{max_budget}, Activities: {activities}")
 
-        # Check for matching activities
-        activity_match = any(activity in destination["activities"] for activity in user_preferences["activities"])
+        # Handle None values in temperature fields
+        if (spring_temp is not None and min_temp <= spring_temp <= max_temp) or \
+           (summer_temp is not None and min_temp <= summer_temp <= max_temp) or \
+           (fall_temp is not None and min_temp <= fall_temp <= max_temp) or \
+           (winter_temp is not None and min_temp <= winter_temp <= max_temp):
 
-        # If all conditions are met, add the destination to recommendations
-        if temp_ok and budget_ok and activity_match:
-            recommended.append(destination)
+            # Check if the destination budget is within the user's budget range
+            if min_budget <= destination["budget"] <= max_budget:
 
-    return recommended
+                # Check if any of the selected activities match the destination's activities
+                if any(activity in destination["activities"] for activity in activities):
+                    recommended_destinations.append(destination)
+
+    print(f"Filtered recommendations: {recommended_destinations}")  # Debugging line
+    return recommended_destinations
