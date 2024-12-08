@@ -1,13 +1,3 @@
-# Core dependencies for API requests and data handling
+pandas
 requests
-urllib3
-pandas           # For managing data from CSV files
-
-# Optional dependencies for additional functionality
-folium           # For interactive maps
-matplotlib       # For visualization if you want to add charts or graphs
-plotly           # Interactive plots (optional)
-exchange-rate-api # Exchange rate conversion (if using Exchange Rates API, otherwise remove)
-
-# For handling JSON data and advanced string formatting if needed
-json5            # Useful for reading/writing JSON config files (optional)
+streamlit
